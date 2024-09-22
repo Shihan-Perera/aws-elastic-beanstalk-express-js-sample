@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'node:16'  
-            args '-v /var/run/docker.sock:/var/run/docker.sock' 
+            image 'node:16'  /
+            args '-v /var/run/docker.sock:/var/run/docker.sock'  
         }
     }
     environment {
@@ -11,27 +11,20 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-               
-                sh 'npm install'
+                sh 'npm install --save'  
             }
         }
         stage('Snyk Security Scan') {
             steps {
-               
-                sh 'npm install -g snyk'
-                
-                
-                sh 'snyk auth $SNYK_TOKEN'
-                
-               
-                sh 'snyk test'
+                sh 'npm install -g snyk'  
+                sh 'snyk auth $SNYK_TOKEN'  
+                sh 'snyk test'  
             }
         }
     }
     post {
         always {
-           
-            sh 'rm -rf node_modules'
+            sh 'rm -rf node_modules'  // Clean up node_modules after every run
         }
     }
 }
