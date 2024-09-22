@@ -11,14 +11,14 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'npm install --save'  
+                sh 'npm install --save'
             }
         }
         stage('Snyk Security Scan') {
             steps {
-                sh 'npm install -g snyk --unsafe-perm'  
-                sh 'snyk auth $SNYK_TOKEN'  
-                sh 'snyk test'  
+                sh 'npm install snyk --save'  
+                sh 'npx snyk auth $SNYK_TOKEN'  
+                sh 'npx snyk test'  
             }
         }
     }
