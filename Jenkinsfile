@@ -1,27 +1,30 @@
 pipeline {
     agent {
         docker {
-            image 'node:16'  // Use Node.js 16 Docker image
-            args '-v /var/run/docker.sock:/var/run/docker.sock'  // If Docker is needed inside container
+            image 'node:16'  
+            args '-v /var/run/docker.sock:/var/run/docker.sock'  
         }
+    }
+    environment {
+        SNYK_TOKEN = credentials('snyk-token')  
     }
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install --save'  
             }
         }
         stage('Snyk Security Scan') {
             steps {
-                sh 'npm install -g snyk'
-                sh 'snyk auth $snyk-token'  
-                sh 'snyk test'
+                sh 'npm install -g snyk --unsafe-perm'  
+                sh 'snyk auth $SNYK_TOKEN'  
+                sh 'snyk test'  
             }
         }
     }
     post {
         always {
-            sh 'rm -rf node_modules'
+            sh 'rm -rf node_modules'  
         }
     }
 }
