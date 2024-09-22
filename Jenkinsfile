@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'your-dockerhub-username/your-custom-node-image'  
-            args '-v /var/run/docker.sock:/var/run/docker.sock' 
+            image 'node:16'  
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v $WORKSPACE:/workspace'
         }
     }
     environment {
@@ -16,6 +16,7 @@ pipeline {
         }
         stage('Snyk Security Scan') {
             steps {
+                sh 'npm install snyk'
                 sh 'snyk auth $SNYK_TOKEN'
                 sh 'snyk test'
             }
