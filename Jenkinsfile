@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'node:16'  
-            args '-v /var/run/docker.sock:/var/run/docker.sock'  
+            args '-v /var/run/docker.sock:/var/run/docker.sock' 
         }
     }
     environment {
@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-             
+               
                 sh 'npm install'
             }
         }
@@ -20,10 +20,10 @@ pipeline {
                
                 sh 'npm install -g snyk'
                 
-             
+                
                 sh 'snyk auth $SNYK_TOKEN'
                 
-             
+               
                 sh 'snyk test'
             }
         }
